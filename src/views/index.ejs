@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM2 进程监控</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PM2 进程监控面板</h1>
+
+        <div class="system-info">
+            <div class="info-card">
+                <h3>系统信息</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">CPU型号：</span>
+                        <span class="info-value"><%= systemInfo.cpuModel || '未知' %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">CPU核心数：</span>
+                        <span class="info-value"><%= systemInfo.cpuCores || 0 %> 核</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">总内存：</span>
+                        <span class="info-value"><%= systemInfo.totalMemory || 0 %> GB</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">CPU使用率：</span>
+                        <span class="info-value"><%= systemInfo.cpuUsage || 0 %>%</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">内存使用率：</span>
+                        <span class="info-value"><%= systemInfo.memoryUsage || 0 %>%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button onclick="executeCommand('start', 'all')">启动全部</button>
+            <button onclick="executeCommand('stop', 'all')">停止全部</button>
+            <button onclick="executeCommand('restart', 'all')">重启全部</button>
+            <button onclick="location.reload()" class="refresh-button">刷新状态</button>
+        </div>
+
+        <% if (error) { %>
+            <div class="error">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>进程名称</th>
+                    <th>进程ID</th>
+                    <th class="path-column">启动文件路径</th>
+                    <th>运行状态</th>
+                    <th>CPU使用率</th>
+                    <th>内存使用</th>
+                    <th>运行时间</th>
+                    <th>重启次数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (processes && processes.length > 0) { %>
+                    <% processes.forEach(function(process) { %>
+                        <tr>
+                            <td><%= process.name %></td>
+                            <td><%= process.pm_id %></td>
+                            <td class="script-path" title="<%= process.pm2_env?.pm_exec_path || '未知' %>">
+                                <%= process.pm2_env?.pm_exec_path || '未知' %>
+                            </td>
+                            <td class="status-<%= process.pm2_env.status %>">
+                                <%= process.pm2_env.status === 'online' ? '运行中' : 
+                                    process.pm2_env.status === 'stopped' ? '已停止' : 
+                                    process.pm2_env.status %>
+                            </td>
+                            <td><%= process.monit ? process.monit.cpu + '%' : '未知' %></td>
+                            <td><%= process.monit ? Math.round(process.monit.memory / 1024 / 1024) + ' MB' : '未知' %></td>
+                            <td><%= process.pm2_env ? Math.round((Date.now() - process.pm2_env.pm_uptime) / 1000) + '秒' : '未知' %></td>
+                            <td><%= process.pm2_env?.restart_time || 0 %></td>
+                            <td>
+                                <button onclick="executeCommand('restart', '<%= process.name %>')">重启</button>
+                                <button onclick="executeCommand('stop', '<%= process.name %>')">停止</button>
+                                <button onclick="executeCommand('start', '<%= process.name %>')">启动</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="9" style="text-align: center;">暂无运行中的进程</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        async function executeCommand(action, processName) {
+            try {
+                const response = await fetch('/command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action, processName }),
+                });
+                const data = await response.json();
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('错误: ' + data.error);
+                }
+            } catch (error) {
+                alert('执行命令出错: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

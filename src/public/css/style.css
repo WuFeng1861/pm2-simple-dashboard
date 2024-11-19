@@ -1,0 +1,196 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 系统信息样式 */
+.system-info {
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.info-card h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.info-label {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.path-column {
+    width: 100px;
+}
+
+/* 设置其他列的宽度 */
+th:nth-child(1) { width: 120px; } /* 进程名称 */
+th:nth-child(2) { width: 80px; }  /* 进程ID */
+th:nth-child(4) { width: 80px; }  /* 运行状态 */
+th:nth-child(5) { width: 90px; }  /* CPU使用率 */
+th:nth-child(6) { width: 90px; }  /* 内存使用 */
+th:nth-child(7) { width: 90px; }  /* 运行时间 */
+th:nth-child(8) { width: 80px; }  /* 重启次数 */
+th:nth-child(9) { width: 220px; } /* 操作列 */
+
+.script-path {
+    font-family: monospace;
+    font-size: 0.9em;
+    cursor: help;
+    position: relative;
+}
+
+.script-path:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+    background: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    white-space: normal;
+    word-break: break-all;
+    max-width: 400px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    line-height: 1.4;
+}
+
+.status-online {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-stopped {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.actions {
+    margin: 20px 0;
+}
+
+button {
+    padding: 8px 16px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* 操作列按钮样式优化 */
+td button {
+    padding: 4px 8px;
+    margin: 0 4px;
+    font-size: 12px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #dc3545;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    background-color: #f8d7da;
+}
+
+.refresh-button {
+    background-color: #28a745;
+}
+
+.refresh-button:hover {
+    background-color: #218838;
+}
+
+.error-container {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
